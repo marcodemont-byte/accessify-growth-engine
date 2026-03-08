@@ -25,11 +25,11 @@ export interface CategorizationResult {
 /** Normalize for matching: lowercase, collapse spaces, strip accents. */
 function normalize(text: string): string {
   return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .replace(/\s+/g, " ")
-    .trim();
+  .toLowerCase()
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .replace(/\s+/g, " ")
+  .trim();
 }
 
 /** Build one string from all inputs for keyword scan. */
