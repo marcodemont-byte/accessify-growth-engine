@@ -1,0 +1,62 @@
+"use client";
+
+import * as React from "react";
+import * as SheetPrimitive from "@radix-ui/react-dialog";
+import { cva, type VariantProps } from "class-variance-authority";
+import { X } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const Sheet = SheetPrimitive.Root;
+const SheetTrigger = SheetPrimitive.Trigger;
+const SheetClose = SheetPrimitive.Close;
+
+const sheetVariants = cva(
+  "fixed z-50 gap-4 bg-card p-6 shadow-panel-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:animate-in data-[state=closed]:animate-out",
+  {
+    variants: {
+      side: {
+        right:
+          "inset-y-0 right-0 h-full w-full max-w-lg border-l border-border data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-xl",
+        left:
+          "inset-y-0 left-0 h-full w-full max-w-lg border-r border-border data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-xl",
+      },
+    },
+    defaultVariants: {
+      side: "right",
+    },
+  }
+);
+
+interface SheetContentProps
+  extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content>,
+    VariantProps<typeof sheetVariants> {
+  title?: string;
+}
+
+const SheetContent = React.forwardRef<
+  React.ElementRef<typeof SheetPrimitive.Content>,
+  SheetContentProps
+>(({ side = "right", className, children, title, ...props }, ref) => (
+  <SheetPrimitive.Portal>
+    <SheetPrimitive.Overlay className="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+    <SheetPrimitive.Content
+      ref={ref}
+      className={cn(sheetVariants({ side }), className)}
+      {...props}
+    >
+      {title && (
+        <div className="flex items-center justify-between border-b border-border pb-4">
+          <h2 className="text-lg font-semibold">{title}</h2>
+          <SheetPrimitive.Close className="rounded-lg opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
+            <X className="h-5 w-5" />
+            <span className="sr-only">Close</span>
+          </SheetPrimitive.Close>
+        </div>
+      )}
+      <div className={cn(title ? "mt-4" : "")}>{children}</div>
+    </SheetPrimitive.Content>
+  </SheetPrimitive.Portal>
+));
+SheetContent.displayName = SheetPrimitive.Content.displayName;
+
+export { Sheet, SheetTrigger, SheetClose, SheetContent };

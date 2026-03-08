@@ -1,0 +1,12 @@
+---
+description: Dokumentation und Outreach – MD-Dateien anlegen, Outreach maximal professionell dokumentieren
+alwaysApply: true
+---
+
+# Dokumentation und Outreach
+
+- **MD-Dateien:** Alle Abläufe, Pipelines und Entscheidungen in Markdown unter `docs/` dokumentieren. Neue Features/Scripts: zugehörige Doku anlegen oder bestehende Docs aktualisieren.
+- **Outreach:** Alles für Reach-out und Lead-Nutzung maximal professionell dokumentieren (Datenqualität, Quellen, Compliance, Prozesse). Siehe `docs/OUTREACH.md` und `docs/CONVENTIONS.md`.
+- **Struktur:** `docs/` für Fach- und Technikdoku; klare Überschriften und ggf. Kurzbeschreibung in jeder MD-Datei.
+
+Diese Regel gilt für alle zukünftigen Änderungen. Bei Unsicherheit: neue oder aktualisierte MD-Datei anlegen.
