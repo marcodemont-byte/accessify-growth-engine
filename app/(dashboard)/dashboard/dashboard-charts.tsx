@@ -2,18 +2,6 @@
 
 import { useRef, useState, useEffect } from "react";
 import {
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-  ResponsiveContainer,
-  Tooltip,
-  CartesianGrid,
-  XAxis,
-  YAxis,
-} from "recharts";
-import {
   ComposableMap,
   Geographies,
   Geography,
@@ -24,8 +12,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ErrorBoundary } from "@/components/error-boundary";
 
 type ByCountry = { country: string; count: number }[];
-type Coverage = { name: string; value: number; fill: string }[];
-type Timeline = { date: string; count: number }[];
 
 const GEO_URL =
   "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json";
@@ -35,14 +21,6 @@ const NAME_TO_CODE: Record<string, string> = {
   Austria: "AT",
   Switzerland: "CH",
 };
-
-function ChartPlaceholder({ title }: { title: string }) {
-  return (
-    <div className="flex h-[220px] w-full items-center justify-center rounded-lg border border-dashed border-border bg-muted/20">
-      <p className="text-sm text-muted-foreground">{title}</p>
-    </div>
-  );
-}
 
 function EventsByCountryMap({ byCountry }: { byCountry?: ByCountry | null }) {
   const safeData = Array.isArray(byCountry) ? byCountry : [];
@@ -132,113 +110,19 @@ function EventsByCountryMap({ byCountry }: { byCountry?: ByCountry | null }) {
   );
 }
 
-export function DashboardCharts({
-  byCountry,
-  coverage,
-  timeline,
-}: {
-  byCountry?: ByCountry | null;
-  coverage?: Coverage | null;
-  timeline?: Timeline | null;
-}) {
+export function DashboardCharts({ byCountry }: { byCountry?: ByCountry | null }) {
   const safeByCountry = Array.isArray(byCountry) ? byCountry : [];
-  const safeCoverage = Array.isArray(coverage) ? coverage : [];
-  const safeTimeline = Array.isArray(timeline) ? timeline : [];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-3">
+    <div className="grid gap-6 lg:grid-cols-1">
       <ErrorBoundary title="Events by country">
-        <Card className="rounded-2xl lg:col-span-1">
+        <Card className="rounded-2xl">
           <CardHeader>
             <CardTitle className="text-base">Events by country</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[220px] w-full [&_svg]:max-h-full [&_svg]:w-auto">
               <EventsByCountryMap byCountry={safeByCountry} />
-            </div>
-          </CardContent>
-        </Card>
-      </ErrorBoundary>
-
-      <ErrorBoundary title="Lead coverage status">
-        <Card className="rounded-2xl lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="text-base">Lead coverage status</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[220px]">
-              {safeCoverage.length === 0 ? (
-                <ChartPlaceholder title="No coverage data" />
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={safeCoverage}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={80}
-                      label={({ name, value }) => `${name}: ${value}`}
-                    >
-                      {safeCoverage.map((entry, i) => (
-                        <Cell key={i} fill={entry?.fill ?? "hsl(var(--muted))"} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      contentStyle={{
-                        borderRadius: "12px",
-                        border: "1px solid hsl(var(--border))",
-                        background: "hsl(var(--card))",
-                      }}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      </ErrorBoundary>
-
-      <ErrorBoundary title="Upcoming events timeline">
-        <Card className="rounded-2xl lg:col-span-1">
-          <CardHeader>
-            <CardTitle className="text-base">Upcoming events timeline</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[220px]">
-              {safeTimeline.length === 0 ? (
-                <ChartPlaceholder title="No timeline data" />
-              ) : (
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    data={safeTimeline.map((t) => ({
-                      ...t,
-                      date: typeof t?.date === "string" ? t.date.slice(5) : "",
-                      count: Number(t?.count) || 0,
-                    }))}
-                    margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
-                  >
-                    <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
-                    <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-                    <YAxis tick={{ fontSize: 12 }} />
-                    <Tooltip
-                      contentStyle={{
-                        borderRadius: "12px",
-                        border: "1px solid hsl(var(--border))",
-                        background: "hsl(var(--card))",
-                      }}
-                    />
-                    <Line
-                      type="monotone"
-                      dataKey="count"
-                      stroke="hsl(162, 65%, 45%)"
-                      strokeWidth={2}
-                      dot={{ fill: "hsl(162, 65%, 45%)" }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              )}
             </div>
           </CardContent>
         </Card>

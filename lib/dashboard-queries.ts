@@ -31,7 +31,7 @@ export type EventLead = {
 export type OrganizerContact = {
   id: string;
   organizer_name: string;
-  website: string;
+  website: string | null;
   contact_email: string | null;
   linkedin_url: string | null;
   source: string;
@@ -350,7 +350,7 @@ export async function getContactsCombined(filters?: {
       return q;
     })(),
   ]);
-  const orgs = (orgsRes.data || []) as { organizer_name: string; website: string; contact_email: string | null; linkedin_url: string | null; source: string }[];
+  const orgs = (orgsRes.data || []) as { organizer_name: string; website: string | null; contact_email: string | null; linkedin_url: string | null; source: string }[];
   const people = (peopleRes.data || []) as ContactPerson[];
   const byOrg = new Map(orgs.map((o) => [o.organizer_name, o]));
   const rows: ContactRow[] = orgs.map((o) => ({
@@ -377,6 +377,19 @@ export async function getContactsCombined(filters?: {
     });
   });
   return rows;
+}
+
+/** Distinct organizer names for manual contact form (event_leads + organizer_contacts). */
+export async function getOrganizerNames(): Promise<string[]> {
+  const supabase = await createClient();
+  const [eventsRes, orgsRes] = await Promise.all([
+    supabase.from("event_leads").select("organizer_name"),
+    supabase.from("organizer_contacts").select("organizer_name"),
+  ]);
+  const fromEvents = (eventsRes.data || []).map((r: { organizer_name: string }) => r.organizer_name);
+  const fromOrgs = (orgsRes.data || []).map((r: { organizer_name: string }) => r.organizer_name);
+  const set = new Set([...fromEvents, ...fromOrgs]);
+  return Array.from(set).filter(Boolean).sort();
 }
 
 export async function getEventById(id: string) {

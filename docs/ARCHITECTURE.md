@@ -48,7 +48,7 @@ app/
 | ---- | ------- |
 | `app/` | Routes, layouts, pages (App Router) |
 | `components/` | Reusable UI: `ui/` (buttons, cards, etc.), `dashboard/` (sidebar, topbar), `error-boundary.tsx`, `dashboard-content-guard.tsx` |
-| `lib/` | Server/client utilities: `supabase/` (server + client + middleware), `dashboard-queries.ts`, `scoring.ts`, `utils.ts` |
+| `lib/` | Server/client utilities: `supabase/` (server + client + middleware), `dashboard-queries.ts`, `event-phases.ts`, `event-categorization.ts`, `scoring.ts`, `utils.ts` |
 | `database/` | SQL: base schema and `migrations/` |
 | `scripts/` | Node scripts: discovery, organizer discover, person enrich, seed, test-supabase |
 | `types/` | TypeScript declarations (e.g. for react-simple-maps, d3-geo) |
@@ -61,7 +61,7 @@ app/
 
 ## Database (conceptual)
 
-- **event_leads** — One row per discovered event; includes pipeline fields (`status`, `owner`, `notes`, `priority`).
+- **event_leads** — One row per discovered event; includes pipeline fields (`status`, `owner`, `notes`, `priority`) and category fields (`event_category`, `category_confidence`, `category_source`).
 - **organizer_contacts** — Organizer-level contact info.
 - **contact_people** — Person-level contacts.
 - **discovery_runs** — Log of discovery runs.

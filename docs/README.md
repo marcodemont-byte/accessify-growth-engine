@@ -15,9 +15,11 @@ Central index for all project documentation.
 
 | Doc | Purpose |
 | --- | ------- |
+| [VERSION.md](VERSION.md) | **Version / Stand der Anwendung** — Basisversion, wichtige Dateien, Migrationen, Aufbau darauf |
 | [DASHBOARD.md](DASHBOARD.md) | Dashboard: pages, auth, tech stack, deploy |
 | [ARCHITECTURE.md](ARCHITECTURE.md) | App structure, routes, lib, database |
 | [API.md](API.md) | API routes (health, discovery, events, organizers) |
+| [BACKFILL_EVENT_CATEGORIES.md](BACKFILL_EVENT_CATEGORIES.md) | Event category backfill: Befehl, Logik, Fehlerbehebung |
 | [../FILE_STRUCTURE.md](../FILE_STRUCTURE.md) | Repo file and folder layout |
 
 ## Other

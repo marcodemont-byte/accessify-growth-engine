@@ -27,8 +27,11 @@ Run the following in **Supabase → SQL Editor** in this order:
 | 4 | `database/migrations/001_replace_livestream_with_scoring_fields.sql` | Scoring fields on `event_leads` |
 | 5 | `database/migrations/002_add_venue_name_and_event_url.sql` | Venue and event URL columns |
 | 6 | `database/migrations/003_dashboard_pipeline_fields.sql` | Pipeline: `status`, `owner`, `notes`, `priority` |
+| 7 | `database/migrations/004_event_category_fields.sql` | Event categories: `event_category`, `category_confidence`, `category_source` |
 
-After running, confirm in **Table Editor** that `event_leads`, `discovery_runs`, `organizer_contacts`, and `contact_people` exist and that `event_leads` has the expected columns (including `status`, `owner`, `notes`, `priority`).
+After running, run the category backfill once so existing rows get real categories: `npm run backfill:event-categories` (see [BACKFILL_EVENT_CATEGORIES.md](BACKFILL_EVENT_CATEGORIES.md)).
+
+Then confirm in **Table Editor** that `event_leads`, `discovery_runs`, `organizer_contacts`, and `contact_people` exist and that `event_leads` has the expected columns (including `status`, `owner`, `notes`, `priority`).
 
 ## 3. Authentication
 

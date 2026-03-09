@@ -3,8 +3,6 @@ import { Badge } from "@/components/ui/badge";
 import {
   getDashboardStats,
   getEventsByCountry,
-  getLeadCoverageStatus,
-  getUpcomingTimeline,
   getTopUpcomingOpportunities,
   getEventLeadsDebug,
 } from "@/lib/dashboard-queries";
@@ -66,10 +64,6 @@ const DEFAULT_BY_COUNTRY = [
   { country: "Other", count: 0 },
 ];
 
-const DEFAULT_COVERAGE = [
-  { name: "No data", value: 1, fill: "hsl(var(--muted))" },
-];
-
 type DebugData = {
   rawCount: number | null;
   countError: { message: string; code?: string; details?: unknown } | null;
@@ -90,8 +84,6 @@ export default async function DashboardPage() {
     results = await Promise.allSettled([
       getDashboardStats(),
       getEventsByCountry(),
-      getLeadCoverageStatus(),
-      getUpcomingTimeline(14),
       getTopUpcomingOpportunities(10),
       getEventLeadsDebug(),
     ]);
@@ -114,24 +106,16 @@ export default async function DashboardPage() {
     results[1].status === "fulfilled" && Array.isArray(results[1].value)
       ? results[1].value
       : DEFAULT_BY_COUNTRY;
-  const coverage =
+  const opportunities =
     results[2].status === "fulfilled" && Array.isArray(results[2].value)
       ? results[2].value
-      : DEFAULT_COVERAGE;
-  const timeline =
-    results[3].status === "fulfilled" && Array.isArray(results[3].value)
-      ? results[3].value
-      : [];
-  const opportunities =
-    results[4].status === "fulfilled" && Array.isArray(results[4].value)
-      ? results[4].value
       : [];
   const debug: DebugData =
-    results[5].status === "fulfilled" &&
-    results[5].value != null &&
-    typeof results[5].value === "object" &&
-    "rawCount" in (results[5].value as object)
-      ? (results[5].value as DebugData)
+    results[3].status === "fulfilled" &&
+    results[3].value != null &&
+    typeof results[3].value === "object" &&
+    "rawCount" in (results[3].value as object)
+      ? (results[3].value as DebugData)
       : DEFAULT_DEBUG;
 
   const safeStats = {
@@ -194,11 +178,7 @@ export default async function DashboardPage() {
       </ErrorBoundary>
 
       <ErrorBoundary title="Charts">
-        <DashboardCharts
-          byCountry={byCountry}
-          coverage={coverage}
-          timeline={timeline}
-        />
+        <DashboardCharts byCountry={byCountry} />
       </ErrorBoundary>
 
       <ErrorBoundary title="Top upcoming opportunities">

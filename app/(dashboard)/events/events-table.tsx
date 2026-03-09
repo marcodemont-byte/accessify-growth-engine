@@ -23,6 +23,7 @@ import { formatDate } from "@/lib/utils";
 import type { EventLeadWithPhase } from "@/lib/dashboard-queries";
 import { EVENT_PHASE_LABELS } from "@/lib/event-phases";
 import { EVENT_CATEGORIES } from "@/lib/event-categorization";
+import { OrganizerPopover } from "./organizer-popover";
 import { Search, Filter, X } from "lucide-react";
 
 const COUNTRIES = ["AT", "CH", "DE"];
@@ -256,7 +257,12 @@ export function EventsTable({
                       </td>
                       <td className="py-4 px-4">{e.country}</td>
                       <td className="py-4 px-4 text-muted-foreground">{e.city ?? "—"}</td>
-                      <td className="py-4 px-4">{e.organizer_name}</td>
+                      <td className="py-4 px-4" onClick={(ev) => ev.stopPropagation()}>
+                        <OrganizerPopover
+                          organizerName={e.organizer_name}
+                          currentEventId={e.id}
+                        />
+                      </td>
                       <td className="py-4 px-4 max-w-[160px]">
                         {e.organizer_website ? (
                           <a
